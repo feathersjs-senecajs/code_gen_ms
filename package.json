@@ -1,0 +1,20 @@
+{
+  "name": "code_gen_ms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/turmundo/gipsi/code_gen_ms.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "seneca": "^3.4.2",
+    "seneca-amqp-transport": "^2.2.0"
+  }
+}
