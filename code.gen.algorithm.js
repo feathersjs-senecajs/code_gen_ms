@@ -1,4 +1,4 @@
-const ribbon = '1234567890ABCDEF';
+const ribbon = 'C190A24EDFB53876';
 
 module.exports = function codeGenerator(seed, n) {
 	const start = seed[seed.length - 1];
