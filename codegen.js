@@ -9,7 +9,7 @@ const DEF_SEED = '111111111';
 module.exports = function codegen(options) {
 	let seed, replyPattern, senecaClient, entity;
 
-	this.add('role:codes,cmd:gen', (msg, reply) => {
+	this.add('cmd:gen', (msg, reply) => {
 		msg = msgManager.receiveMessage(msg);
 		replyPattern = msg.reply;
 		doReply(codeGenerator(seed, msg.count), reply);
