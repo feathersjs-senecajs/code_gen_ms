@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Observable = require('rxjs/Rx').Observable;
 const config = require('./config');
 const codeGenerator = require('./code.gen.algorithm');
-const patternEncoder = require('./seneca.pattern.encoder');
+const msgManager = require('./ms.message.manager');
 
 const DEF_SEED = '111111111';
 
@@ -10,7 +10,8 @@ module.exports = function codegen(options) {
 	let seed, replyPattern, senecaClient, entity;
 
 	this.add('role:codes,cmd:gen', (msg, reply) => {
-		replyPattern = patternEncoder.decode(`${msg.reply}`);
+		msg = msgManager.receiveMessage(msg);
+		replyPattern = msg.reply;
 		doReply(codeGenerator(seed, msg.count), reply);
 	});
 	
@@ -23,7 +24,9 @@ module.exports = function codegen(options) {
 					return console.error(err);
 				}
 				entity = entity;
-				senecaClient.act(`${replyPattern}${JSON.stringify(codes)}`, console.log);
+				msgManager
+					.sendOneWayMessage(senecaClient, `${replyPattern}${JSON.stringify(codes)}`)
+					.subscribe(console.info);
 				reply(null, { msg: 'ok' });
 			});
 	}
