@@ -46,7 +46,11 @@ module.exports = function codegen(options) {
 
 	this.add('init:codegen', (msg, reply) => {
 		entity = this.make$('seed');
-		senecaClient = options.seneca.client(config.conn);
+		senecaClient = options.seneca.client({
+			type: 'amqp',
+			pin: 'role:*',
+			url: config.conn.url
+		});
 		initializeDb().subscribe(res => { 
 			seed = res;
 			reply();
