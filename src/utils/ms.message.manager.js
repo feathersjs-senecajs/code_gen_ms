@@ -2,20 +2,31 @@
 
 const Observable = require('rxjs/Rx').Observable;
 
-function sendMessage(senecaClient, msg, replyPattern) {
+/*Request purpose*/
+function sendMessage(senecaClient, msgPattern, data, replyPattern) {
 	if (!replyPattern) {
 		throw new Error('Invalid reply pattern');
 	}
 	const encodedReplyPattern = encode(replyPattern);
-	const fullPattern = `${msg},reply:${encodedReplyPattern}`;
+
+	for (const k in data) {
+		msgPattern = `${msgPattern},${k}:${stringifyValue(data[k])}`;
+	}
+	const fullPattern = `${msgPattern},reply:${encodedReplyPattern}`;
 	
-	return Observable.bindNodeCallback(senecaClient.act)
-		.call(senecaClient, fullPattern);
+	senecaClient.act(fullPattern);
 }
 
-function sendOneWayMessage(senecaClient, msg) {
-	return Observable.bindNodeCallback(senecaClient.act)
-		.call(senecaClient, msg);
+function stringifyValue(value) {
+	return typeof value === 'object' ?
+		JSON.stringify(value) : value;
+}
+
+/*Response purpose*/
+function sendOneWayMessage(senecaClient, msgPattern, input, result) {
+	senecaClient.act(
+		`${msgPattern}${stringifyValue(result)},input:${stringifyValue(input)}`
+	);
 }
 
 function receiveMessage(msg) {

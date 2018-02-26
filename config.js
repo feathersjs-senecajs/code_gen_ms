@@ -1,7 +1,15 @@
+const connType = 'amqp';
+const url = 'amqp://localhost:5672';
+
 module.exports = {
 	conn: {
-		type: 'amqp',
+		type: connType,
 		pin: 'role:codes',
-		url: 'amqp://localhost:5672'
+		url: url
+	},
+	clientConn: {
+		type: connType,
+		pin: 'role:*',
+		url: url
 	}
 };

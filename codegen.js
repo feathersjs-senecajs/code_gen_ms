@@ -1,59 +1,30 @@
-const _ = require('lodash'); 
 const Observable = require('rxjs/Rx').Observable;
 const config = require('./config');
-const codeGenerator = require('./code.gen.algorithm');
-const msgManager = require('./ms.message.manager');
 
-const DEF_SEED = '111111111';
+const genCodesRoute = require('./src/routes/gen.codes');
 
 module.exports = function codegen(options) {
-	let seed, replyPattern, senecaClient, entity;
-
-	this.add('cmd:gen', (msg, reply) => {
-		msg = msgManager.receiveMessage(msg);
-		replyPattern = msg.reply;
-		doReply(codeGenerator(seed, msg.count), reply);
+	this.add('cmd:gen', genCodesRoute(options));
+	
+	this.add('init:codegen', (msg, reply) => {
+		options.entity = this.make$('seed');
+		options.senecaClient = options.seneca.client(config.clientConn);
+		initializeDb().subscribe(res => { 
+			options.seed = res;
+			reply();
+		});
 	});
-	
-	function doReply(codes, reply) {
-		seed = _.last(codes);
-		entity
-			.data$({ text: seed })
-			.save$((err, entity) => {
-				if (err) {
-					return console.error(err);
-				}
-				entity = entity;
-				msgManager
-					.sendOneWayMessage(senecaClient, `${replyPattern}${JSON.stringify(codes)}`)
-					.subscribe(console.info);
-				reply(null, { msg: 'ok' });
-			});
-	}
-	
+
 	function initializeDb() {
-		let entityListAsObservable = Observable.bindNodeCallback(entity.list$);
+		let entityListAsObservable = Observable.bindNodeCallback(options.entity.list$);
 	
-		return entityListAsObservable.call(entity, null)
+		return entityListAsObservable.call(options.entity, null)
 			.map(res => res[0])
 			.map(res => {
-				return res.length > 0 ? res[0].text : DEF_SEED;
+				return res.length > 0 ? res[0].text : null;
 			})
 			.catch(err => {
 				console.error(err);
 			});
 	}
-
-	this.add('init:codegen', (msg, reply) => {
-		entity = this.make$('seed');
-		senecaClient = options.seneca.client({
-			type: 'amqp',
-			pin: 'role:*',
-			url: config.conn.url
-		});
-		initializeDb().subscribe(res => { 
-			seed = res;
-			reply();
-		});
-	});
 };

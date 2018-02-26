@@ -1,6 +1,9 @@
-const ribbon = '1234567890ABCDEF';
+const ribbon = '56D7C908A241FBE3';
+const _ = require('lodash');
 
 module.exports = function codeGenerator(seed, n) {
+	seed = seed || firstSeed(9);
+
 	const start = seed[seed.length - 1];
 	let cursor = ribbon.indexOf(start) + 1;
 	let result = [];
@@ -23,6 +26,10 @@ module.exports = function codeGenerator(seed, n) {
 		result[result.length - 1]
 	];
 	return aux;
+}
+
+function firstSeed(length) {
+	return _.repeat(ribbon[0], length);
 }
 
 function nextSeed(seed) {
