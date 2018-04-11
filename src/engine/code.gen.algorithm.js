@@ -14,7 +14,7 @@ module.exports = function codeGenerator(seed, n) {
 			result.push(`${seed.substr(0, seed.length - 1)}${ribbon[cursor++]}`);
 		}
 		else {
-			seed = nextSeed(result[result.length - 1]);
+			seed = nextSeed(result[result.length - 1] || seed);
 			cursor = 0;
 		}
 	}
