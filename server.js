@@ -8,7 +8,7 @@ const senecaServer = seneca
 	.use('mongo-store', {
 		name: 'codegendb',
 		host: '192.168.20.182',
-		port: 27017,
+		port: 3133,
 		options: {}
 	})
 	.listen(config.conn);
