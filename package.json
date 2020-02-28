@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -14,7 +15,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lodash": "^4.17.5",
+    "rxjs": "^5.5.6",
     "seneca": "^3.4.2",
-    "seneca-amqp-transport": "^2.2.0"
+    "seneca-amqp-transport": "^2.2.0",
+    "seneca-basic": "^0.5.1",
+    "seneca-entity": "^2.0.2",
+    "seneca-jsonfile-store": "^1.0.1",
+    "seneca-mongo-store": "^1.1.0"
   }
 }
