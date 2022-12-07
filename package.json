@@ -17,7 +17,7 @@
   "dependencies": {
     "lodash": "^4.17.5",
     "rxjs": "^5.5.6",
-    "seneca": "^3.4.2",
+    "seneca": "^3.29.0",
     "seneca-amqp-transport": "^2.2.0",
     "seneca-basic": "^0.5.1",
     "seneca-entity": "^2.0.2",
